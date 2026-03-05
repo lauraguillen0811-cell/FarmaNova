@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Farmacología Clínica - Portal Educativo</title>
+    <style>
+        :root {
+            --primary-color: #0056b3;
+            --secondary-color: #008dc9;
+            --accent-color: #e74c3c;
+            --bg-color: #f4f7f6;
+            --text-color: #333;
+            --light-text: #fff;
+            --card-bg: #ffffff;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+
+        /* Navegación */
+        nav {
+            background-color: var(--primary-color);
+            color: var(--light-text);
+            padding: 1rem 2rem;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        nav .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            gap: 20px;
+        }
+
+        nav ul li a {
+            color: var(--light-text);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        nav ul li a:hover {
+            color: var(--secondary-color);
+        }
+
+        /* Contenedor Principal */
+        .container {
+            max-width: 1100px;
+            margin: 80px auto 40px; /* Margen top para el nav */
+            padding: 20px;
+        }
+
+        /* Secciones */
+        section {
+            background: var(--card-bg);
+            padding: 30px;
+            margin-bottom: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        }
+
+        h2 {
+            color: var(--primary-color);
+            border-bottom: 2px solid var(--secondary-color);
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            text-align: center;
+            padding: 60px 20px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+        }
+        .hero h1 { font-size: 2.5rem; margin-bottom: 15px; }
+        .hero p { font-size: 1.1rem; max-width: 700px; margin: 0 auto; }
+
+        /* Acordeón para Conferencias */
+        .accordion-item {
+            background-color: #f9f9f9;
+            border: 1px solid #ddd;
+            margin-bottom: 10px;
+            border-radius: 5px;
+        }
+        .accordion-header {
+            padding: 15px;
+            cursor: pointer;
+            font-weight: bold;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .accordion-header:hover { background-color: #eef2f3; }
+        .accordion-content {
+            padding: 0 15px;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+            background-color: white;
+        }
+        .accordion-content p { padding: 15px 0; }
+        .active .accordion-content { max-height: 200px; }
+        .active .accordion-header { background-color: var(--secondary-color); color: white; }
+
+        /* Videos */
+        .video-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+        .video-card {
+            border: 1px solid #ddd;
+            padding: 10px;
+            border-radius: 5px;
+        }
+        .video-wrapper {
+            position: relative;
+            padding-bottom: 56.25%; /* 16:9 Aspect Ratio */
+            height: 0;
+        }
+        .video-wrapper iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        /* Test/Quiz */
+        .quiz-container {
+            border: 1px solid #ddd;
+            padding: 20px;
+            border-radius: 5px;
+            background: #fafafa;
+        }
+        .question-box {
+            margin-bottom: 20px;
+        }
+        .options label {
+            display: block;
+            margin: 5px 0;
+            cursor: pointer;
+        }
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+        .btn:hover { background-color: #004494; }
+        
+        #result {
+            margin-top: 20px;
+            padding: 15px;
+            font-weight: bold;
+            text-align: center;
+            display: none;
+            border-radius: 5px;
+        }
+        .correct { background-color: #d4edda; color: #155724; }
+        .incorrect { background-color: #f8d7da; color: #721c24; }
+
+        /* Bibliografía */
+        .biblio-list li {
+            margin-bottom: 10px;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            nav ul { display: none; } /* Simplificación para móvil, podría ser hamburger menu */
+            nav ul.active { display: flex; flex-direction: column; position: absolute; top: 60px; right: 0; background: var(--primary-color); padding: 20px; width: 100%; }
+            .container { padding: 10px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navegación -->
+    <nav>
+        <div class="logo">Farmacología Clínica</div>
+        <ul>
+            <li><a href="#inicio">Inicio</a></li>
+            <li><a href="#conferencias">Conferencias</a></li>
+            <li><a href="#videos">Video Clases</a></li>
+            <li><a href="#materiales">Materiales</a></li>
+            <li><a href="#evaluacion">Test</a></li>
+        </ul>
+    </nav>
+
+    <div class="container">
+        
+        <!-- Inicio -->
+        <div class="hero" id="inicio">
+            <h1>Bienvenidos al Curso de Farmacología Clínica</h1>
+            <p>Portal dedicado al estudio de la interacción de fármacos en el organismo humano, terapéutica y seguridad del paciente. Aquí encontrarás todos los recursos necesarios para tu formación académica.</p>
+        </div>
+
+        <!-- Conferencias -->
+        <section id="conferencias">
+            <h2>Conferencias y Temario</h2>
+            
+            <div class="accordion-item">
+                <div class="accordion-header">Tema 1: Introducción a la Farmacología Clínica <span>+</span></div>
+                <div class="accordion-content">
+                    <p><strong>Descripción:</strong> Conceptos básicos, historia y relación con otras ciencias médicas.<br>
+                    <strong>Material:</strong> <a href="#">Descargar Presentación PDF</a></p>
+                </div>
+            </div>
+
+            <div class="accordion-item">
+                <div class="accordion-header">Tema 2: Farmacocinética (ADME) <span>+</span></div>
+                <div class="accordion-content">
+                    <p><strong>Descripción:</strong> Absorción, Distribución, Metabolismo y Excreción de fármacos.<br>
+                    <strong>Material:</strong> <a href="#">Descargar Guía de Estudio</a></p>
+                </div>
+            </div>
+
+            <div class="accordion-item">
+                <div class="accordion-header">Tema 3: Farmacodinamia <span>+</span></div>
+                <div class="accordion-content">
+                    <p><strong>Descripción:</strong> Mecanismos de acción, receptores y curvas dosis-respuesta.<br>
+                    <strong>Material:</strong> <a href="#">Descargar Esquemas</a></p>
+                </div>
+            </div>
+
+            <div class="accordion-item">
+                <div class="accordion-header">Tema 4: Farmacovigilancia <span>+</span></div>
+                <div class="accordion-content">
+                    <p><strong>Descripción:</strong> Detección, evaluación y prevención de reacciones adversas.<br>
+                    <strong>Material:</strong> <a href="#">Normativa Oficial</a></p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Videos -->
+        <section id="videos">
+            <h2>Video Clases</h2>
+            <div class="video-grid">
+                <!-- Video 1 -->
+                <div class="video-card">
+                    <h3>Cálculo de Dosis</h3>
+                    <div class="video-wrapper">
+                        <!-- Reemplaza el src con tu video de YouTube real -->
+                        <iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ" title="Video 1" frameborder="0" allowfullscreen></iframe>
+                    </div>
+                    <p style="margin-top:10px; font-size: 0.9rem;">Explicación detallada sobre cómo calcular dosis pediátricas y adultas.</p>
+                </div>
+
+                <!-- Video 2 -->
+                <div class="video-card">
+                    <h3>Interacciones Farmacológicas</h3>
+                    <div class="video-wrapper">
+                        <iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ" title="Video 2" frameborder="0" allowfullscreen></iframe>
+                    </div>
+                    <p style="margin-top:10px; font-size: 0.9rem;">Principales interacciones fármaco-fármaco y fármaco-alimento.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Materiales y Bibliografía -->
+        <section id="materiales">
+            <h2>Materiales Complementarios y Bibliografía</h2>
+            
+            <h3>Bibliografía Recomendada</h3>
+            <ul class="biblio-list" style="margin-bottom: 20px; list-style: disc; padding-left: 20px;">
+                <li>Goodman & Gilman. <em>Las Bases Farmacológicas de la Terapéutica</em>. 13ª Edición.</li>
+                <li>Katzung, B. G. <em>Farmacología Básica y Clínica</em>. 14ª Edición.</li>
+                <li>Flores-Murrieta, F. <em>Farmacología Clínica para los Profesiones de la Salud</em>.</li>
+            </ul>
+
+            <h3>Recursos Descargables</h3>
+            <ul style="list-style: none;">
+                <li>📄 <a href="#">Guía de Prescripción Racional</a></li>
+                <li>📊 <a href="#">Tabla de Antimicrobianos</a></li>
+                <li>📋 <a href="#">Formulario Terapéutico Básico</a></li>
+            </ul>
+        </section>
+
+        <!-- Evaluación -->
+        <section id="evaluacion">
+            <h2>Test de Autocontrol</h2>
+            <p>Responde las siguientes preguntas para evaluar tus conocimientos.</p>
+            
+            <form id="quizForm" class="quiz-container">
+                <!-- Pregunta 1 -->
+                <div class="question-box">
+                    <p><strong>1. ¿Cuál es la vía de administración que evita el efecto de primer paso hepático?</strong></p>
+                    <div class="options">
+                        <label><input type="radio" name="q1" value="a"> a) Oral</label>
+                        <label><input type="radio" name="q1" value="b"> b) Intravenosa</label>
+                        <label><input type="radio" name="q1" value="c"> c) Sublingual</label>
+                        <label><input type="radio" name="q1" value="d"> d) Rectal (parcialmente)</label>
+                    </div>
+                </div>
+
+                <!-- Pregunta 2 -->
+                <div class="question-box">
+                    <p><strong>2. El volumen de distribución (Vd) es alto cuando:</strong></p>
+                    <div class="options">
+                        <label><input type="radio" name="q2" value="a"> a) El fármaco se queda en la sangre.</label>
+                        <label><input type="radio" name="q2" value="b"> b) El fármaco se acumula en los tejidos.</label>
+                        <label><input type="radio" name="q2" value="c"> c) El fármaco no se absorbe.</label>
+                        <label><input type="radio" name="q2" value="d"> d) La dosis es muy baja.</label>
+                    </div>
+                </div>
+
+                <button type="button" class="btn" onclick="checkQuiz()">Verificar Respuestas</button>
+                <div id="result"></div>
+            </form>
+        </section>
+
+    </div>
+
+    <footer style="text-align: center; padding: 20px; background: #333; color: #fff; margin-top: 40px;">
+        <p>© 2023 Cátedra de Farmacología Clínica. Todos los derechos reservados.</p>
+        <p>Desarrollado con fines educativos.</p>
+    </footer>
+
+    <!-- Scripts -->
+    <script>
+        // Script para el Acordeón
+        const accItems = document.querySelectorAll('.accordion-item');
+
+        accItems.forEach(item => {
+            const header = item.querySelector('.accordion-header');
+            header.addEventListener('click', () => {
+                // Cierra los demás
+                accItems.forEach(otherItem => {
+                    if (otherItem !== item) {
+                        otherItem.classList.remove('active');
+                    }
+                });
+                // Toggle el actual
+                item.classList.toggle('active');
+            });
+        });
+
+        // Script para el Quiz
+        function checkQuiz() {
+            let score = 0;
+            const answers = {
+                q1: 'c', // Sublingual evita el primer paso
+                q2: 'b'  // Acumulación en tejidos implica alto Vd
+            };
+
+            // Validar Pregunta 1
+            const q1Inputs = document.getElementsByName('q1');
+            let q1Answer = '';
+            q1Inputs.forEach(input => { if(input.checked) q1Answer = input.value; });
+            
+            // Validar Pregunta 2
+            const q2Inputs = document.getElementsByName('q2');
+            let q2Answer = '';
+            q2Inputs.forEach(input => { if(input.checked) q2Answer = input.value; });
+
+            // Calcular
+            if (q1Answer === answers.q1) score++;
+            if (q2Answer === answers.q2) score++;
+
+            // Mostrar Resultado
+            const resultDiv = document.getElementById('result');
+            resultDiv.style.display = 'block';
+            
+            if (score === 2) {
+                resultDiv.className = 'correct';
+                resultDiv.innerText = "¡Excelente! Has respondido correctamente todas las preguntas.";
+            } else if (score === 1) {
+                resultDiv.className = '';
+                resultDiv.style.backgroundColor = "#fff3cd";
+                resultDiv.style.color = "#856404";
+                resultDiv.innerText = `Has obtenido ${score}/2. ¡Casi lo logras! Revisa los temas.`;
+            } else {
+                resultDiv.className = 'incorrect';
+                resultDiv.innerText = `Has obtenido ${score}/2. Te recomendamos repasar el material de Farmacocinética.`;
+            }
+        }
+    </script>
+</body>
+</html>
